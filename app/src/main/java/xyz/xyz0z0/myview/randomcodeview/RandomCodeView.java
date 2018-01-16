@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -86,6 +87,34 @@ public class RandomCodeView extends View {
             init(fontMetrics, mHeight);
         }
 
+        setBackgroundColor(mBgColor);
+
+        String drawText = "A B C D";
+        float startX = (getWidth() - mPaint.measureText(drawText)) / 2;
+        for (int i = 0;i<4;i++){
+            mPaint.setColor(mColors[i]);
+            float x = startX+i*mPaint.measureText("A ");
+            if (i==3){
+                canvas.drawText(String.valueOf(mCodes[i]),x,mYs[i],mPaint);
+            } else {
+                canvas.drawText(mCodes[i]+" ",x,mYs[i],mPaint);
+            }
+        }
+
+        // 三条干扰线
+        for (int i = 0;i<3;i++){
+            mPaint.setColor(getTextRandomColor());
+            canvas.drawLine(0,mRandom.nextInt(mHeight),mWidth,mRandom.nextInt(mHeight),mPaint);
+
+        }
+
+        mPaint.setStrokeWidth(8);
+        // 二十个干扰点
+        for (int i=0;i<20;i++){
+            mPaint.setColor(getTextRandomColor());
+            canvas.drawPoint(mRandom.nextInt(mWidth),mRandom.nextInt(mHeight),mPaint);
+        }
+
     }
 
     /**
@@ -106,11 +135,28 @@ public class RandomCodeView extends View {
             mColors[i] = getTextRandomColor();
         }
         if (mIsOnClickRefresh) {
-
+            this.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    flag = false;
+                    invalidate();
+                }
+            });
         }
+        flag = true;
     }
 
+    /**
+     * 获取随机颜色
+     *
+     * @return
+     */
     private int getTextRandomColor() {
+
+        int r = mRandom.nextInt(90) + 40;
+        int g = mRandom.nextInt(90) + 40;
+        int b = mRandom.nextInt(90) + 40;
+        return Color.rgb(r, g, b);
     }
 
     private char getRandomText() {
@@ -134,5 +180,31 @@ public class RandomCodeView extends View {
         int g = mRandom.nextInt(140) + 115;
         int b = mRandom.nextInt(140) + 115;
         return Color.rgb(r, g, b);
+    }
+
+    public String getRandomCode(){
+        return String.valueOf(mCodes);
+    }
+
+    public boolean checkRes(String code){
+        if (TextUtils.isEmpty(String.valueOf(mCodes))||TextUtils.isEmpty(code)){
+            return false;
+        }
+        if (String.valueOf(mCodes).toLowerCase().equals(code.trim().toLowerCase())){
+            return true;
+        }
+        return false;
+    }
+
+    public void setOnClickRefresh(boolean refresh) {
+        if (refresh) {
+            this.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    flag = false;
+                    invalidate();
+                }
+            });
+        }
     }
 }
