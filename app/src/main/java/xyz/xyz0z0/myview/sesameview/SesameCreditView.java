@@ -18,7 +18,5 @@ public class SesameCreditView extends View {
         super(context, attrs);
     }
 
-    public SesameCreditView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-    }
+
 }
