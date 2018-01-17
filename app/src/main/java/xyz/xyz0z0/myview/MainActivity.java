@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 
 import xyz.xyz0z0.myview.randomcodeview.RandomCodeActivity;
+import xyz.xyz0z0.myview.sesameview.SesameViewActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -20,6 +21,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(MainActivity.this, RandomCodeActivity.class));
+            }
+        });
+
+        findViewById(R.id.sesame_view).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this, SesameViewActivity.class));
             }
         });
     }
